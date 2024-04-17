@@ -2,36 +2,20 @@
 
 const express = require("express"),
   app = express(),
-  router = express.Router(),
-
-  methodOverride = require("method-override");
-
+  mysql = require("mysql"),
+  drugsRouter = require("./routes/drugsRouter"),
+  connection = mysql.createConnection({
+    host: "34.22.68.10",
+    user: "root",
+    password:"sungshin",
+    database:"supporty",
+    port:"3306",
+  });
+  
 app.set("port", process.env.PORT || 80);
-app.use("/",router)
+app.use("/drugs", drugsRouter);
+connection.connect();
 
-const drugscontroller = require("./controllers/drugscontroller");
-
-router.use(
-  methodOverride("_method", {
-    methods: ["POST", "GET"]
-  })
-);
-
-router.use(
-  express.urlencoded({
-    extended: false
-  })
-);
-router.use(express.json());
-
-app.get("/", (req,res)=> {
-  res.send("복용약 page home");
-});
-router.get("/drugs",drugscontroller.showTodayDrugList);
-router.get("/drugs/entire", drugscontroller.showEntireDrugList);
-router.get("/drugs/record",drugscontroller.showTodayDrugRecord);
-router.get("/drugs/entire/record",drugscontroller.showDrugRecord);
-router.get("/drugs/info",drugscontroller.showDrugInfo);
 
 app.listen(app.get("port"), () => {
   console.log(`Server running at http://localhost:${app.get("port")}`);
