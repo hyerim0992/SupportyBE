@@ -26,17 +26,10 @@ router.use(
   })
 );
 router.use(express.json());
-
-app.get("/", (req,res)=> {
-  res.send("복용약 page home");
-});
-router.get("/drugs",drugscontroller.showTodayDrugList);
-router.get("/drugs/entire", drugscontroller.showEntireDrugList);
-router.get("/drugs/record",drugscontroller.showTodayDrugRecord);
-router.get("/drugs/entire/record",drugscontroller.showDrugRecord);
-router.get("/drugs/info",drugscontroller.showDrugInfo);
-
-
+  
+app.set("port", process.env.PORT || 80);
+app.use("/drugs", drugsRouter);
+connection.connect();
 
 // 목표
 const errorHandler = require('./middlewares/errorMiddleware');
